@@ -1,3 +1,2 @@
 # LetterCubd
-
-This is where she makes a mod.
+My first GD mod
