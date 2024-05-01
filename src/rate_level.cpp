@@ -21,8 +21,8 @@ class $modify(LevelInfoWithRating, LevelInfoLayer) {
             menu_selector(LevelInfoWithRating::onClick)
         );
 
-        getChildOfType<CCLabelBMFont>(this, 2)->setID("like-count");
-        auto like_count = this->getChildByID("like-count");
+       
+        auto like_count = this->getChildByID("likes-label");
 
         menu->addChild(btn);
         menu->setPosition(like_count->getPosition() + CCPoint { 50.f, 0.f });

@@ -5,9 +5,19 @@
 		"android": "2.205",
 		"mac": "2.200"
 	},
+
 	"version": "v1.0.0",
 	"id": "mooftwo.lettercubd",
 	"name": "LetterCubd",
 	"developer": "Mooftwo",
-	"description": "Level rating and cataloguing mod similar to websites like Letterboxd and RateYourMusic"
+	"description": "Level rating and cataloguing mod similar to websites like Letterboxd and RateYourMusic",
+	"dependencies": [
+        {
+            "id": "geode.node-ids",
+            "version": "v1.5.0",
+            "importance": "required"
+        }
+    ]
+	
+	
 }
