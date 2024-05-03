@@ -51,14 +51,34 @@ protected:
 
         
         //add star buttons
+
+        auto star_menu = CCMenu::create();
+        star_menu->setContentSize({300.f, 140.f});
+        star_menu->setPositionX(menu->getPositionX() - menu->getContentWidth() / 2);
+        star_menu->setPositionY(menu->getPositionY() - menu->getContentHeight() / 2);
+        
+        //star_menu->setAnchorPoint({0.0f, 0.5f});
+        star_menu->setID("star-menu");
+        menu->addChild(star_menu);
+
         CCArray *star_buttons;
         star_buttons = CCArray::createWithCapacity(10);
 
         
-        CCPoint starting_pos = {20.f, 20.f};
+        CCPoint starting_pos = {0.f, 0.f};
 
         for(int i = 1; i <= 10; ++i) {
-            auto star = CCSprite::createWithSpriteFrameName("GJ_bigStar_noShadow_001.png");
+            
+            CCSprite *star;
+            if(i % 2 != 0) {
+                star = CCSprite::create("StarLeft_color.png"_spr);
+            }else{
+                star = CCSprite::create("StarRight_color.png"_spr);
+            }
+            
+            //auto star = CCSprite::create("StarLeft_color.png"_spr);
+            star->setScale(0.8f);
+            
             auto star_btn = CCMenuItemSpriteExtra::create(
                 star,
                 this,
@@ -68,8 +88,11 @@ protected:
             star_btn->setUserObject(star_buttons);
             star_buttons->addObject(star_btn);
 
-            menu->addChild(star_btn);
-            star_btn->setPositionX(starting_pos.x + (i * 10.f));
+            star_menu->addChild(star_btn);
+            
+            star_btn->setPositionY(menu->getContentHeight() / 2);
+            float gap = star_menu->getContentWidth() / 10;
+            star_btn->setPositionX(starting_pos.x + ((i - 1) * gap));
         }
         
 
@@ -86,8 +109,6 @@ protected:
 
         this->setTitle(test, "bigFont.fnt", 1.f);
         //loop through the array of star sprites to change them to black/colored
-
-
 
     }
     
