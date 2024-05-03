@@ -16,7 +16,7 @@ class $modify(LevelInfoWithRating, LevelInfoLayer) {
 
         auto menu = CCMenu::create();
         menu->setID("rating-button");
-        auto spr = CircleButtonSprite::createWithSpriteFrameName("star_small01_001.png", 2.f);
+        auto spr = CircleButtonSprite::createWithSpriteFrameName("GJ_bigStar_noShadow_001.png");
         spr->setScale(0.5f);
         auto btn = CCMenuItemSpriteExtra::create(
             spr,

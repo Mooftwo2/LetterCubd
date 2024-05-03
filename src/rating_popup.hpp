@@ -1,3 +1,4 @@
+#include "Geode/binding/ButtonSprite.hpp"
 #include "Geode/ui/Popup.hpp"
 
 using namespace geode::prelude;
@@ -9,22 +10,52 @@ protected:
 
         // convenience function provided by Popup 
         // for adding/setting a title to the popup
-        this->setTitle("Rate level");
+        this->setTitle("Rate level", "bigFont.fnt", 1.f);
+        this->m_title->setColor(ccColor3B {255,255,255});
+        
+        auto menu = this->m_buttonMenu;
+        menu->setID("rating-popup");
+        menu->removeChild(this->m_closeBtn, true);
 
-        //auto label = CCLabelBMFont::create(value.c_str(), "bigFont.fnt");
-        //label->setPosition(winSize / 2);
+        auto submit_spr = ButtonSprite::create("Submit");
+        auto submit_btn = CCMenuItemSpriteExtra::create(
+            submit_spr,
+            this,
+            menu_selector(RatingPopup::onSubmit)
+        );
+        submit_btn->setID("submit-button");
 
-        //we add the buttons here
+        auto cancel_spr = ButtonSprite::create("Cancel");
+        auto cancel_btn = CCMenuItemSpriteExtra::create(
+            cancel_spr,
+            this,
+            menu_selector(RatingPopup::onClose)
+        );
+        cancel_btn->setID("cancel-button");
+       
+        menu->addChild(cancel_btn);
+        cancel_btn->setPosition((menu->getContentWidth() / 2) - 60.f, 30.f);
 
-        //this->addChild(label);
+        menu->addChild(submit_btn);
+        submit_btn->setPosition((menu->getContentWidth() / 2) + 60.f, 30.f);
 
         return true;
+    }
+
+
+    void onStarClick(CCObject* sender) {
+
+    }
+    
+    void onSubmit(CCObject* sender) {
+        this->setTitle("test", "bigFont.fnt", 1.f);
+        this->onClose(sender);
     }
 
 public:
     static RatingPopup* create(std::string const& text) {
         auto ret = new RatingPopup();
-        if (ret && ret->initAnchored(300.f, 150.f, text)) {
+        if (ret && ret->initAnchored(300.f, 140.f, text)) {
             ret->autorelease();
             return ret;
         }
