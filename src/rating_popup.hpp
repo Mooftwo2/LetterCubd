@@ -1,6 +1,12 @@
+#pragma once
+
 #include "Geode/GeneratedPredeclare.hpp"
 #include "Geode/binding/ButtonSprite.hpp"
 #include "Geode/binding/CCMenuItemSpriteExtra.hpp"
+#include "Geode/binding/GJAccountManager.hpp"
+#include "Geode/binding/GJGameLevel.hpp"
+#include "Geode/modify/GJUserScore.hpp"
+#include "Geode/binding/GJUserScore.hpp"
 #include "Geode/cocos/cocoa/CCArray.h"
 #include "Geode/cocos/cocoa/CCObject.h"
 #include "Geode/cocos/label_nodes/CCLabelBMFont.h"
@@ -9,8 +15,11 @@
 #include "Geode/loader/Log.hpp"
 #include "Geode/ui/Popup.hpp"
 #include "ccTypes.h"
+#include "player_profile.hpp"
+#include "ratings_dict.hpp"
 #include <array>
 #include <fmt/core.h>
+#include <fmt/format.h>
 #include <string>
 #include <vector>
 
@@ -26,12 +35,14 @@ struct ButtonStuff : public CCObject {
     }
 };
 
-class RatingPopup : public geode::Popup<std::string const&> {
+class RatingPopup : public geode::Popup<GJGameLevel *> {
 
-float star_rating = 0;
+float star_rating_float = 0;
+int star_rating_int = 0;
+int m_levelID = 0;
 
 protected:
-    bool setup(std::string const& value) override {
+    bool setup(GJGameLevel * level) override {
         auto winSize = CCDirector::sharedDirector()->getWinSize();
         
         // convenience function provided by Popup 
@@ -54,6 +65,7 @@ protected:
         );
         submit_btn->setID("submit-button");
         submit_btn->setEnabled(false);
+        submit_btn->setUserObject(level);
         
 
         auto cancel_spr = ButtonSprite::create("Cancel");
@@ -141,7 +153,7 @@ protected:
         static_cast<CCNode*>(sender)->getUserObject()
         );
 
-        if(star_rating == 0) { 
+        if(star_rating_float == 0) { 
             auto clickable_spr = ButtonSprite::create("Submit");
             clickable_spr->setColor({255,255,255});
             buttons->submit_btn->setSprite(clickable_spr);
@@ -149,8 +161,8 @@ protected:
             buttons->submit_btn->setEnabled(true);
         }
 
-        star_rating = static_cast<float>(sender->getTag()) / 2.0f;
-        int star_rating_int = sender->getTag();
+        star_rating_float = static_cast<float>(sender->getTag()) / 2.0f;
+        star_rating_int = sender->getTag();
         
         //loop through the array of star sprites to change them to black/colored
         //all stars before including the one was clicked get brighter
@@ -175,7 +187,7 @@ protected:
 
         }
         
-        std::string rating_string = std::to_string(star_rating);
+        std::string rating_string = std::to_string(star_rating_float);
         buttons->rating_text->setString(rating_string.substr(0,4).c_str());
         //this->setTitle(std::to_string(star_rating_int), "bigFont.fnt", 1.f);
 
@@ -183,14 +195,24 @@ protected:
     
     void onSubmit(CCObject* sender) {
         //add star rating to the user's database
-        this->setTitle("test", "bigFont.fnt", 1.f);
+
+        auto info = GameLevelManager::get();
+        auto score = info->userInfoForAccountID(GJAccountManager::get()->m_accountID);
+
+        auto obj = static_cast<CCNode*>(sender)->getUserObject();
+        auto lvl = static_cast<GJGameLevel*>(obj);
+        
+        int levelID = lvl->m_levelID.value();
+        log::info("{}", std::to_string(levelID));
+        //score->addRating(m_levelID, star_rating_int);
+        
         this->onClose(sender);
     }
 
 public:
-    static RatingPopup* create(std::string const& text) {
+    static RatingPopup* create(GJGameLevel * level) {
         auto ret = new RatingPopup();
-        if (ret && ret->initAnchored(300.f, 140.f, text)) {
+        if (ret && ret->initAnchored(300.f, 140.f, level)) {
             ret->autorelease();
             return ret;
         }

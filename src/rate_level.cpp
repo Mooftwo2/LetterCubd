@@ -2,6 +2,7 @@
 #include "Geode/binding/LevelInfoLayer.hpp"
 #include "Geode/cocos/cocoa/CCGeometry.h"
 #include "Geode/cocos/label_nodes/CCLabelBMFont.h"
+#include "Geode/utils/SeedValue.hpp"
 #include "Geode/utils/cocos.hpp"
 #include <Geode/modify/LevelInfoLayer.hpp>
 #include "rating_popup.hpp"
@@ -13,6 +14,8 @@ class $modify(LevelInfoWithRating, LevelInfoLayer) {
     bool init(GJGameLevel* level, bool challenge) {
         if (!LevelInfoLayer::init(level, challenge))
             return false;
+        
+        
 
         auto menu = CCMenu::create();
         menu->setID("rating-button");
@@ -24,6 +27,7 @@ class $modify(LevelInfoWithRating, LevelInfoLayer) {
             menu_selector(LevelInfoWithRating::onClick)
         );
         btn->setID("rating-button");
+        btn->setUserObject(level);
     
        
         auto like_count = this->getChildByID("likes-label");
@@ -39,7 +43,9 @@ class $modify(LevelInfoWithRating, LevelInfoLayer) {
 
     void onClick(CCObject* sender) {
         
-        RatingPopup::create("test")->show();
+        auto obj = static_cast<CCNode*>(sender)->getUserObject();
+        auto lvl = static_cast<GJGameLevel*>(obj);
+        RatingPopup::create(lvl)->show();
 
         
     }
