@@ -7,6 +7,7 @@
 #include "Geode/loader/Log.hpp"
 #include "Geode/modify/ProfilePage.hpp"
 #include "ratings_dict.hpp"
+#include <string>
 
 using namespace geode::prelude;
 
@@ -38,9 +39,13 @@ class $modify(OwnProfilePageRatings, ProfilePage) {
     }
 
     void onRatingsClick(CCObject * sender) {
+        //log::info("{}",(Mod::get()->getSaveDir().generic_string()));
         
         
+        
+
     }
+    
 
 };
 

@@ -47,6 +47,7 @@ protected:
         
         // convenience function provided by Popup 
         // for adding/setting a title to the popup
+
         this->setTitle("Rate level", "bigFont.fnt", 1.f);
         this->m_title->setColor(ccColor3B {255,255,255});
         
@@ -195,17 +196,16 @@ protected:
     
     void onSubmit(CCObject* sender) {
         //add star rating to the user's database
-
-        auto info = GameLevelManager::get();
-        auto score = info->userInfoForAccountID(GJAccountManager::get()->m_accountID);
-
         auto obj = static_cast<CCNode*>(sender)->getUserObject();
         auto lvl = static_cast<GJGameLevel*>(obj);
         
         int levelID = lvl->m_levelID.value();
-        log::info("{}", std::to_string(levelID));
-        //score->addRating(m_levelID, star_rating_int);
+
+        auto ratings_data = RatingsDictionary::getInstance();
+        ratings_data->addRating(levelID,star_rating_int);
         
+        Mod::get()->setSavedValue("ratings", ratings_data->getMap());
+        //log::info("{}", std::to_string(value));
         this->onClose(sender);
     }
 
