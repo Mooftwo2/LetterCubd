@@ -40,7 +40,13 @@ class $modify(OwnProfilePageRatings, ProfilePage) {
 
     void onRatingsClick(CCObject * sender) {
         //log::info("{}",(Mod::get()->getSaveDir().generic_string()));
+        auto data = RatingsDictionary::getInstance();
         
+        for (const auto& pair : data->getMap()) {
+			log::info("{}", pair.first); 
+			log::info("{}", std::to_string(pair.second)); 
+		}
+
         
         
 

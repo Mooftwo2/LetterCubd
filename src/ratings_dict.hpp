@@ -7,7 +7,7 @@ using namespace geode::prelude;
 class RatingsDictionary {
 private:
     static RatingsDictionary* instance; // Static pointer to hold the single instance
-    std::map<int, int> ratings; // Regular member variable
+    std::map<std::string, int> ratings; // Regular member variable
 
     // Private constructor to prevent instantiation
     RatingsDictionary() {}
@@ -22,36 +22,48 @@ public:
     }
 
     // Method to access the map
-    std::map<int, int>& getMap() {
+    std::map<std::string, int>& getMap() {
         return ratings;
     }
-    void addRating(int levelID, int rating) {
+    void addRating(std::string levelID, int rating) {
         ratings[levelID] = rating;
     }
 
-    void setRatings(std::map<int, int> myMap) {
+    void setRatings(std::map<std::string, int> myMap) {
         ratings = myMap;
     }
 };
 
-template<>
-struct matjson::Serialize<std::map<int, int>> {
-    static std::map<int, int> from_json(matjson::Value const& value) {
-        std::map<int, int> data;
-        auto obj = value.as_object();
-        for (auto const& entry : obj["ratings"].as_object()) {
-            data[std::stoi(entry.first)] = entry.second.as_int();
-        }
-        return data;
-    };
+template <class T>
+	struct matjson::Serialize<std::map<std::string, T>> {
+		static std::map<std::string, T> from_json(Value const& value)
+			requires requires(Value const& value) {
+				value.template as<std::decay_t<T>>();
+			}
+		{
+			std::map<std::string, T> res;
+			auto obj = value.as_object();
+			for (auto& [k, v] : obj) {
+				res.insert({ k, v.template as<std::decay_t<T>>() });
+			}
+			return res;
+		}
 
-    static matjson::Value to_json(std::map<int, int> const& value) {
-        auto obj = matjson::Object();
-        for (auto const& pair : value) {
-            obj[std::to_string(pair.first)] = pair.second;
-        }
-        return obj;
-    }
-};
+		static Value to_json(std::map<std::string, T> const& value)
+			requires requires(T const& value) {
+				Value(value);
+			}
+		{
+			Object res;
+			for (auto& [k, v] : value) {
+				res[k] = (Value(v));
+			}
+			return res;
+		}
 
+		static bool is_json(Value const& value) {
+			// TODO: this is intentionally lazy..
+			return value.is_object();
+		}
+	};
 

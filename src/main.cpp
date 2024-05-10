@@ -18,15 +18,16 @@ class $modify(LetterCubdMenuLayer, MenuLayer) {
 		auto winSize = CCDirector::get()->getWinSize();
 		RatingsDictionary* mapInstance = RatingsDictionary::getInstance();
 
-		auto saved = Mod::get()->getSavedValue<std::map<int,int>>("ratings");
+		auto saved = Mod::get()->getSavedValue<std::map<std::string,int>>("ratings");
 		if(saved.empty()) {log::info("{}", "fuck you");}
-		
+		mapInstance->setRatings(saved);
 		//Mod::get()->setSavedValue("ratings", saved);
-		
+		/*
 		for (const auto& pair : saved) {
-			log::info("{}", std::to_string(pair.first)); 
+			log::info("{}", pair.first); 
 			log::info("{}", std::to_string(pair.second)); 
 		}
+		*/
 		
 		
 		

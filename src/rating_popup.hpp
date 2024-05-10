@@ -199,7 +199,7 @@ protected:
         auto obj = static_cast<CCNode*>(sender)->getUserObject();
         auto lvl = static_cast<GJGameLevel*>(obj);
         
-        int levelID = lvl->m_levelID.value();
+        std::string levelID = std::to_string(lvl->m_levelID.value());
 
         auto ratings_data = RatingsDictionary::getInstance();
         ratings_data->addRating(levelID,star_rating_int);
