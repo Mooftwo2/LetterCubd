@@ -15,7 +15,7 @@
 #include "Geode/loader/Log.hpp"
 #include "Geode/ui/Popup.hpp"
 #include "ccTypes.h"
-#include "player_profile.hpp"
+#include "ratings_profile.hpp"
 #include "ratings_dict.hpp"
 #include <array>
 #include <fmt/core.h>

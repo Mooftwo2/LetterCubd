@@ -11,6 +11,8 @@ add_library(${PROJECT_NAME} SHARED
     src/main.cpp
     src/rate_level.cpp
     src/ratings_dict.cpp
+    src/player_profile.cpp
+    src/ratings_profile.cpp
     # Add your cpp files here
 )
 

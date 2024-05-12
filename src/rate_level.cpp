@@ -10,7 +10,6 @@
 using namespace geode::prelude;
 
 class $modify(LevelInfoWithRating, LevelInfoLayer) {
-
     bool init(GJGameLevel* level, bool challenge) {
         if (!LevelInfoLayer::init(level, challenge))
             return false;

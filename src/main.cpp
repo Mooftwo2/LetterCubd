@@ -3,8 +3,9 @@
 #include "Geode/cocos/label_nodes/CCLabelBMFont.h"
 #include <Geode/modify/MenuLayer.hpp>
 #include <cstddef>
-#include "player_profile.hpp"
+#include "ratings_profile.hpp"
 #include "ratings_dict.hpp"
+#include "player_profile.hpp"
 
 using namespace geode::prelude;
 
@@ -44,8 +45,9 @@ class $modify(LetterCubdMenuLayer, MenuLayer) {
 	void onMyProfile(cocos2d::CCObject *sender) {
 		auto account = GJAccountManager::get();
 		auto id = account->m_accountID;
-	
 		OwnProfilePageRatings::create(id, true)->show();
 
 	}
+	
+
 };
