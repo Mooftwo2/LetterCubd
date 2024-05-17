@@ -20,7 +20,6 @@
 #include "Geode/loader/Log.hpp"
 #include "Geode/modify/ProfilePage.hpp"
 #include "ratings_dict.hpp"
-#include "rating_cell.hpp"
 #include "player_profile.hpp"
 #include <string>
 
