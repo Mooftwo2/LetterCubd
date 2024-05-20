@@ -21,7 +21,12 @@
     "resources": {
         "sprites": [
 			"resources/*.png"    
-		]
+		],
+		"spritesheets": {
+			"StarRatings":[
+				"resources/sheets/*.png"
+			]
+		}
     }
 	
 	

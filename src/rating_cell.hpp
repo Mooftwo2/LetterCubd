@@ -6,15 +6,35 @@
 #include "Geode/cocos/sprite_nodes/CCSprite.h"
 #include "Geode/modify/Modify.hpp"
 #include "Geode/ui/ListView.hpp"
+#include <Geode/utils/web.hpp>
 #include <string>
 
 using namespace geode::prelude;
 
+
+struct RatingInfo {
+    int m_rating;
+    int m_levelID;
+    int m_difficulty;
+    int m_demon_difficulty;
+    std::string m_level_name;
+    std::string m_creator_name;
+
+};
+
+
 class RatingCell : public CCLayerColor {
+
+CCSprite * diff_spr;
+CCSprite * star_sprite;
+CCLabelBMFont * level_text;
+CCLabelBMFont * creator_text;
+RatingInfo m_info;
 
     bool init(std::string levelID, int rating) {
         if(!CCLayerColor::init()) {return false;}
-
+        m_info.m_rating = rating;
+        
         this->setContentSize(ccp(350, 60));
         this->setOpacity(50);
         this->setAnchorPoint(ccp(0, 0));
@@ -22,29 +42,156 @@ class RatingCell : public CCLayerColor {
         //web fetch
         
 
+        web::AsyncWebRequest()
+            .userAgent("")
+            .postRequest()
+            .bodyRaw(fmt::format("type=0&secret=Wmfd2893gb7&str={}", levelID))
+            .fetch("http://www.boomlings.com/database/getGJLevels21.php")
+            .text()
+            .then([this, levelID](std::string const& level) {
+                parseLevel(level);
+                
+                
+
+            })
+            .expect([this](std::string const& error) {
+                // something went wrong with our web request Q~Q
+                log::info("{}", "fetch unsuccessful");
+            });
+    
+    
+        return true;
+    }
+    
+    void chooseStarSprite(int rating) {
+        //this is awful but idc lololololol
+        switch (rating) {
+            case 1:
+                star_sprite = CCSprite::createWithSpriteFrameName("half star.png"_spr);
+                break;
+            case 2:
+                star_sprite = CCSprite::createWithSpriteFrameName("1 star.png"_spr);
+                break;
+            case 3:
+                star_sprite = CCSprite::createWithSpriteFrameName("1.5 stars.png"_spr);
+                break;  
+            case 4:
+                star_sprite = CCSprite::createWithSpriteFrameName("2 star.png"_spr);
+                break; 
+            case 5:
+                star_sprite = CCSprite::createWithSpriteFrameName("2.5 star.png"_spr);
+                break; 
+            case 6:
+                star_sprite = CCSprite::createWithSpriteFrameName("3 star.png"_spr);
+                break; 
+            case 7:
+                star_sprite = CCSprite::createWithSpriteFrameName("3.5 star.png"_spr);
+                break; 
+            case 8:
+                star_sprite = CCSprite::createWithSpriteFrameName("4 star.png"_spr);
+                break; 
+            case 9:
+                star_sprite = CCSprite::createWithSpriteFrameName("4.5 star.png"_spr);
+                break; 
+            case 10:
+                star_sprite = CCSprite::createWithSpriteFrameName("5 star.png"_spr);
+                break; 
+            default:
+                log::info("{}", "why am i here");
+                break;
+        }
+    }
+
+    void chooseDifficultySprite(std::string is_demon, std::string raw_diff, std::string demon_diff) {
+        //yandere dev level coding :)
+        
+
+
+
+        if(is_demon == "") {
+            diff_spr = CCSprite::createWithSpriteFrameName("diffIcon_02_btn_001.png");
+        }
+        else{
+            diff_spr = CCSprite::createWithSpriteFrameName("diffIcon_10_btn_001.png");
+            
+        }
+        
+
+
+
+    }
+
+    void parseLevel(std::string level) {
+        std::unordered_map<std::string, std::string> result;
+        std::vector<std::string> tokens;
+        std::stringstream ss(level);
+        std::string token;
+
+        //extract the creator's name from the query
+        std::string creator_substring = level.substr(level.find("#"));
+        size_t firstColon = creator_substring.find(':');
+        size_t secondColon = creator_substring.find(':', firstColon + 1);
+        if (firstColon != std::string::npos && secondColon != std::string::npos) {
+            m_info.m_creator_name = creator_substring.substr(firstColon + 1, secondColon - firstColon - 1);
+        }
+
+        // Split the string by ':'
+        while (std::getline(ss, token, ':')) {
+            tokens.push_back(token);
+        }
+
+        // Iterate through the tokens and populate the map
+        for (size_t i = 0; i < tokens.size(); i += 2) {
+            if (i + 1 < tokens.size()) {
+                result[tokens[i]] = tokens[i + 1];
+            }
+        }
+        
+        //updating info from the map
+        m_info.m_level_name = result.find("2")->second;
+        
+        log::info("{}", result.find("17")->second);
+        
+        chooseDifficultySprite(result.find("17")->second, result.find("9")->second, result.find("43")->second);
+
+
+        onGetLevelFinished();
+        
+    }
+
+
+   
+    void onGetLevelFinished() {
         //generate the UI Content
-        auto diff_spr = CCSprite::createWithSpriteFrameName("GJ_bigStar_noShadow_001.png"); //REPLACE WITH DIFFICULTY FACES
+        
+        //diff_spr = CCSprite::createWithSpriteFrameName("GJ_bigStar_noShadow_001.png"); //REPLACE WITH DIFFICULTY FACES
         diff_spr->setPositionY(this->getContentHeight()/2);
         diff_spr->setPositionX(diff_spr->getPositionX() + 25.f);
         this->addChild(diff_spr);
 
-        auto level_text = CCLabelBMFont::create("Level Name", "goldFont.fnt");
-        auto creator_text = CCLabelBMFont::create("Creator", "goldFont.fnt"); //PLACEHOLDER TEXT
+        //auto name_str = (m_level_name).c_str();
+        //log::info("{}", m_level_name);
+        level_text = CCLabelBMFont::create(m_info.m_level_name.c_str(), "goldFont.fnt");
+        creator_text = CCLabelBMFont::create(m_info.m_creator_name.c_str(), "goldFont.fnt"); //PLACEHOLDER TEXT
+
         
+        chooseStarSprite(m_info.m_rating);
+        star_sprite->setScale(0.5f);
+        star_sprite->setPositionX(this->getContentWidth() - 65.f);
+        star_sprite->setPositionY(diff_spr->getPositionY());
+        this->addChild(star_sprite);
+        
+        level_text->limitLabelWidth(150.f, 1.f, 0.5f);
         level_text->setPositionY(diff_spr->getPositionY() + 20.f);
         level_text->setPositionX(diff_spr->getPositionX() + 100.f);
 
+        creator_text->limitLabelWidth(150.f, 1.f, 0.5f);
         creator_text->setPositionX(level_text->getPositionX());
         creator_text->setPositionY(level_text->getPositionY() - 30.f);
         creator_text->setScale(0.8f);
 
         this->addChild(level_text);
         this->addChild(creator_text);
-
-        return true;
-    }
-
-    void fetchLevel(std::string levelID) {
 
     }
 
@@ -60,4 +207,9 @@ public:
             return nullptr;
         }
     }
+    /*
+    RatingInfo getRatingInfo() {
+        return this->m_info;
+    }
+    */
 };
