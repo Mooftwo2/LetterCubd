@@ -102,17 +102,40 @@ RatingInfo m_info;
         }
     }
 
-    void chooseDifficultySprite(std::string is_demon, std::string raw_diff, std::string demon_diff) {
+    void chooseDifficultySprite(std::string is_demon, std::string raw_diff, std::string demon_diff, std::string is_auto) {
         //yandere dev level coding :)
         
-
-
-
-        if(is_demon == "") {
-            diff_spr = CCSprite::createWithSpriteFrameName("diffIcon_02_btn_001.png");
+        if(is_auto == "1") {
+            diff_spr = CCSprite::createWithSpriteFrameName("diffIcon_auto_btn_001.png");
+            return;
+        }
+        if(is_demon == "1") {
+            if(demon_diff == "3") {
+                diff_spr = CCSprite::createWithSpriteFrameName("diffIcon_07_btn_001.png");
+            }else if(demon_diff == "4") {
+                diff_spr = CCSprite::createWithSpriteFrameName("diffIcon_08_btn_001.png");
+            }else if(demon_diff == "0") {
+                diff_spr = CCSprite::createWithSpriteFrameName("diffIcon_06_btn_001.png");
+            }else if (demon_diff == "5") {
+                diff_spr = CCSprite::createWithSpriteFrameName("diffIcon_09_btn_001.png");
+            }else if (demon_diff == "6") {
+                diff_spr = CCSprite::createWithSpriteFrameName("diffIcon_10_btn_001.png");
+            }
         }
         else{
-            diff_spr = CCSprite::createWithSpriteFrameName("diffIcon_10_btn_001.png");
+            if(raw_diff == "0") {
+                diff_spr = CCSprite::createWithSpriteFrameName("diffIcon_00_btn_001.png");
+            }else if(raw_diff == "10") {
+                diff_spr = CCSprite::createWithSpriteFrameName("diffIcon_01_btn_001.png");
+            }else if(raw_diff == "20") {
+                diff_spr = CCSprite::createWithSpriteFrameName("diffIcon_02_btn_001.png");
+            }else if(raw_diff == "30") {
+                diff_spr = CCSprite::createWithSpriteFrameName("diffIcon_03_btn_001.png");
+            }else if(raw_diff == "40") {
+                diff_spr = CCSprite::createWithSpriteFrameName("diffIcon_04_btn_001.png");
+            }else if (raw_diff == "50") {
+                diff_spr = CCSprite::createWithSpriteFrameName("diffIcon_05_btn_001.png");
+            }
             
         }
         
@@ -152,7 +175,7 @@ RatingInfo m_info;
         
         log::info("{}", result.find("17")->second);
         
-        chooseDifficultySprite(result.find("17")->second, result.find("9")->second, result.find("43")->second);
+        chooseDifficultySprite(result.find("17")->second, result.find("9")->second, result.find("43")->second, result.find("25")->second);
 
 
         onGetLevelFinished();
