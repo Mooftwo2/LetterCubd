@@ -34,6 +34,7 @@ public:
     }
 };
 
+/*
 template <class T>
 	struct matjson::Serialize<std::map<std::string, T>> {
 		static std::map<std::string, T> from_json(Value const& value)
@@ -66,4 +67,4 @@ template <class T>
 			return value.is_object();
 		}
 	};
-
+*/

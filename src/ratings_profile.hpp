@@ -73,11 +73,7 @@ protected:
     void onExit(CCObject * sender);
     void getRatings();
     
-    
 
-
-        
-    
 public:
     static RatingProfile* create() {
         auto ret = new RatingProfile();

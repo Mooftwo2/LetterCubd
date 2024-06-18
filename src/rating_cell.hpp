@@ -41,6 +41,9 @@ RatingInfo m_info;
 
         //web fetch
         
+        
+        /*
+
 
         web::AsyncWebRequest()
             .userAgent("")
@@ -59,7 +62,7 @@ RatingInfo m_info;
                 log::info("{}", "fetch unsuccessful");
             });
     
-    
+        */
         return true;
     }
     
