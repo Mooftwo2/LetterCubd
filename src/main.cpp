@@ -24,13 +24,13 @@ class $modify(LetterCubdMenuLayer, MenuLayer) {
 		auto saved = Mod::get()->getSavedValue<std::map<std::string,int>>("ratings");
 		if(saved.empty()) {log::info("{}", "fuck you");}
 		mapInstance->setRatings(saved);
-		//Mod::get()->setSavedValue("ratings", saved);
-		/*
+		Mod::get()->setSavedValue("ratings", saved);
+		
 		for (const auto& pair : saved) {
 			log::info("{}", pair.first); 
 			log::info("{}", std::to_string(pair.second)); 
 		}
-		*/
+		
 		
 	
 		//mapInstance->setRatings(saved);
@@ -56,8 +56,6 @@ class $modify(LevelInfoWithRating, LevelInfoLayer) {
         if (!LevelInfoLayer::init(level, challenge))
             return false;
         
-        
-
         auto menu = CCMenu::create();
         menu->setID("rating-button");
 		menu->setAnchorPoint({0.f, 0.f});
