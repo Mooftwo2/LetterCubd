@@ -26,10 +26,12 @@ class $modify(LetterCubdMenuLayer, MenuLayer) {
 		mapInstance->setRatings(saved);
 		Mod::get()->setSavedValue("ratings", saved);
 		
+		/*
 		for (const auto& pair : saved) {
 			log::info("{}", pair.first); 
 			log::info("{}", std::to_string(pair.second)); 
 		}
+		*/
 		
 		
 	

@@ -63,6 +63,32 @@ RatingInfo m_info;
             });
     
         */
+        EventListener<web::WebTask> m_listener;
+        web::WebRequest req = web::WebRequest();
+        std::string url = "http://www.boomlings.com/database/getGJLevels21.php";
+
+        req.userAgent("");
+        req.bodyString(fmt::format("type=0&secret=Wmfd2893gb7&str={}", levelID));
+
+        auto task = req.post(url);
+
+        m_listener.bind([this] (web::WebTask::Event* e) {
+            if (web::WebResponse* value = e->getValue()) {
+                // The request finished!
+                auto str = value->string().unwrap();
+                parseLevel(str);
+
+            } else if (web::WebProgress* progress = e->getProgress()) {
+                // The request is still in progress...
+                
+
+            } else if (e->isCancelled()) {
+                // Our request was cancelled
+                
+            }
+        });
+        m_listener.setFilter(task);
+
         return true;
     }
     
