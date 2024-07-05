@@ -4,6 +4,7 @@
 #include "Geode/cocos/label_nodes/CCLabelBMFont.h"
 #include <Geode/modify/MenuLayer.hpp>
 #include <Geode/modify/LevelInfoLayer.hpp>
+#include <Geode/utils/web.hpp>
 #include <cstddef>
 #include "ratings_profile.hpp"
 #include "ratings_dict.hpp"
@@ -33,9 +34,6 @@ class $modify(LetterCubdMenuLayer, MenuLayer) {
 		}
 		*/
 		
-		
-	
-		//mapInstance->setRatings(saved);
 
 		
 	

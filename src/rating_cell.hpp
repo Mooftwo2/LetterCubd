@@ -31,6 +31,8 @@ CCLabelBMFont * level_text;
 CCLabelBMFont * creator_text;
 RatingInfo m_info;
 
+EventListener<web::WebTask> m_listener;
+
     bool init(std::string levelID, int rating) {
         if(!CCLayerColor::init()) {return false;}
         m_info.m_rating = rating;
@@ -38,57 +40,36 @@ RatingInfo m_info;
         this->setContentSize(ccp(350, 60));
         this->setOpacity(50);
         this->setAnchorPoint(ccp(0, 0));
-
-        //web fetch
-        
-        
-        /*
-
-
-        web::AsyncWebRequest()
-            .userAgent("")
-            .postRequest()
-            .bodyRaw(fmt::format("type=0&secret=Wmfd2893gb7&str={}", levelID))
-            .fetch("http://www.boomlings.com/database/getGJLevels21.php")
-            .text()
-            .then([this, levelID](std::string const& level) {
-                parseLevel(level);
-                
-                
-
-            })
-            .expect([this](std::string const& error) {
-                // something went wrong with our web request Q~Q
-                log::info("{}", "fetch unsuccessful");
-            });
     
-        */
-        EventListener<web::WebTask> m_listener;
-        web::WebRequest req = web::WebRequest();
-        std::string url = "http://www.boomlings.com/database/getGJLevels21.php";
-
-        req.userAgent("");
-        req.bodyString(fmt::format("type=0&secret=Wmfd2893gb7&str={}", levelID));
-
-        auto task = req.post(url);
-
+        //web fetch
+    
         m_listener.bind([this] (web::WebTask::Event* e) {
+            
             if (web::WebResponse* value = e->getValue()) {
                 // The request finished!
                 auto str = value->string().unwrap();
-                parseLevel(str);
+
+                log::info("{}", str);
 
             } else if (web::WebProgress* progress = e->getProgress()) {
                 // The request is still in progress...
-                
+                //log::info("{}", "progress");
+
 
             } else if (e->isCancelled()) {
                 // Our request was cancelled
+                //log::info("{}", "fail");
                 
             }
         });
-        m_listener.setFilter(task);
 
+        auto req = web::WebRequest().userAgent("").bodyString(fmt::format("type=0&secret=Wmfd2893gb7&str={}", levelID));
+        std::string url = "http://www.boomlings.com/database/getGJLevels21.php";
+        
+        auto task = req.post(url);
+        m_listener.setFilter(task);
+        
+        
         return true;
     }
     
