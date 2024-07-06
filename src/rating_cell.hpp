@@ -7,20 +7,11 @@
 #include "Geode/modify/Modify.hpp"
 #include "Geode/ui/ListView.hpp"
 #include <Geode/utils/web.hpp>
+#include "ratings_dict.hpp"
 #include <string>
 
 using namespace geode::prelude;
 
-
-struct RatingInfo {
-    int m_rating;
-    int m_levelID;
-    int m_difficulty;
-    int m_demon_difficulty;
-    std::string m_level_name;
-    std::string m_creator_name;
-
-};
 
 
 class RatingCell : public CCLayerColor {
@@ -31,43 +22,15 @@ CCLabelBMFont * level_text;
 CCLabelBMFont * creator_text;
 RatingInfo m_info;
 
-EventListener<web::WebTask> m_listener;
-
-    bool init(std::string levelID, int rating) {
+    bool init(RatingInfo info) {
         if(!CCLayerColor::init()) {return false;}
-        m_info.m_rating = rating;
+        m_info = info;
         
         this->setContentSize(ccp(350, 60));
         this->setOpacity(50);
         this->setAnchorPoint(ccp(0, 0));
     
-        //web fetch
-    
-        m_listener.bind([this] (web::WebTask::Event* e) {
-            
-            if (web::WebResponse* value = e->getValue()) {
-                // The request finished!
-                auto str = value->string().unwrap();
-
-                log::info("{}", str);
-
-            } else if (web::WebProgress* progress = e->getProgress()) {
-                // The request is still in progress...
-                //log::info("{}", "progress");
-
-
-            } else if (e->isCancelled()) {
-                // Our request was cancelled
-                //log::info("{}", "fail");
-                
-            }
-        });
-
-        auto req = web::WebRequest().userAgent("").bodyString(fmt::format("type=0&secret=Wmfd2893gb7&str={}", levelID));
-        std::string url = "http://www.boomlings.com/database/getGJLevels21.php";
         
-        auto task = req.post(url);
-        m_listener.setFilter(task);
         
         
         return true;
@@ -230,9 +193,9 @@ EventListener<web::WebTask> m_listener;
 
 
 public:
-    static RatingCell* create(std::string levelID, int rating) {
+    static RatingCell* create(RatingInfo info) {
         RatingCell* pRet = new RatingCell();
-        if (pRet && pRet->init(levelID, rating)) {
+        if (pRet && pRet->init(info)) {
             pRet->autorelease();
             return pRet;
         } else {

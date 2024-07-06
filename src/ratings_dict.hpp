@@ -2,18 +2,39 @@
 
 #include "Geode/binding/GJUserScore.hpp"
 #include "Geode/modify/GJUserScore.hpp"
+#include "Geode/utils/web.hpp"
+
 using namespace geode::prelude;
+
+
+struct RatingInfo {
+    int m_rating;
+    int m_levelID;
+    int m_difficulty;
+    std::string m_level_name;
+    std::string m_creator_name;
+
+};
 
 class RatingsDictionary {
 private:
     static RatingsDictionary* instance; // Static pointer to hold the single instance
-    std::map<std::string, int> ratings; // Regular member variable
-
+	std::map<std::string, int> saved_ratings;
+	std::vector<RatingInfo> cached_ratings;
+	bool cached;
+	
     // Private constructor to prevent instantiation
-    RatingsDictionary() {}
+    RatingsDictionary() {
+		cached = false;
+	}
 
 public:
     // Method to get the instance
+
+	bool isCached() {
+		return cached;
+	}
+
     static RatingsDictionary* getInstance() {
         if (!instance) {
             instance = new RatingsDictionary();
@@ -22,16 +43,28 @@ public:
     }
 
     // Method to access the map
-    std::map<std::string, int>& getMap() {
-        return ratings;
+    std::vector<RatingInfo>& getCache() {
+        return cached_ratings;
     }
-    void addRating(std::string levelID, int rating) {
-        ratings[levelID] = rating;
+	std::map<std::string, int> getSaved() {
+		return saved_ratings;
+	}
+
+    void addCachedRating(RatingInfo info) {
+        cached_ratings.push_back(info);
     }
 
-    void setRatings(std::map<std::string, int> myMap) {
-        ratings = myMap;
-    }
+	void addSavedRating(std::string levelID, int rating) {
+		saved_ratings[levelID] = rating;
+	}
+
+	void setSavedRatings(std::map<std::string, int> saved) {
+		saved_ratings = saved;
+	}
+	void setCachedRatings(std::vector<RatingInfo> cache) {
+		cached_ratings = cache;
+	}
+
 };
 
 /*

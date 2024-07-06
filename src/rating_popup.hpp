@@ -1,5 +1,6 @@
 #pragma once
 
+#include "Geode/Enums.hpp"
 #include "Geode/GeneratedPredeclare.hpp"
 #include "Geode/binding/ButtonSprite.hpp"
 #include "Geode/binding/CCMenuItemSpriteExtra.hpp"
@@ -198,13 +199,20 @@ protected:
         //add star rating to the user's database
         auto obj = static_cast<CCNode*>(sender)->getUserObject();
         auto lvl = static_cast<GJGameLevel*>(obj);
-        
-        std::string levelID = std::to_string(lvl->m_levelID.value());
+
+
+        RatingInfo info = RatingInfo();
+        info.m_rating = star_rating_int;
+        info.m_levelID = lvl->m_levelID.value();
+        info.m_level_name = lvl->m_levelName;
+        info.m_creator_name = lvl->m_creatorName;
+        info.m_difficulty = static_cast<int>(lvl->m_difficulty);
 
         auto ratings_data = RatingsDictionary::getInstance();
-        ratings_data->addRating(levelID,star_rating_int);
+        ratings_data->addCachedRating(info);
+        ratings_data->addSavedRating(std::to_string(info.m_levelID), info.m_rating);
         
-        Mod::get()->setSavedValue("ratings", ratings_data->getMap());
+        Mod::get()->setSavedValue("ratings", ratings_data->getSaved());
         //log::info("{}", std::to_string(value));
         this->onClose(sender);
     }

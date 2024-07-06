@@ -72,6 +72,7 @@ protected:
 
     void onExit(CCObject * sender);
     void getRatings();
+    void sortRatings(std::string filter);
     
 
 public:
