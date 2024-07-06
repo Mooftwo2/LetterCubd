@@ -7,6 +7,7 @@
 using namespace geode::prelude;
 
 
+
 struct RatingInfo {
     int m_rating;
     int m_levelID;
@@ -15,6 +16,7 @@ struct RatingInfo {
     std::string m_creator_name;
 
 };
+
 
 class RatingsDictionary {
 private:
@@ -49,6 +51,8 @@ public:
 	std::map<std::string, int> getSaved() {
 		return saved_ratings;
 	}
+
+	void cacheAllRatings(std::map<std::string, int>);
 
     void addCachedRating(RatingInfo info) {
         cached_ratings.push_back(info);

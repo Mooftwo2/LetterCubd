@@ -9,6 +9,7 @@
 #include "Geode/cocos/cocoa/CCObject.h"
 #include "Geode/cocos/menu_nodes/CCMenu.h"
 #include "Geode/cocos/sprite_nodes/CCSprite.h"
+#include "Geode/loader/Event.hpp"
 #include "Geode/modify/FriendsProfilePage.hpp"
 #include "Geode/ui/BasedButtonSprite.hpp"
 #include "Geode/utils/cocos.hpp"

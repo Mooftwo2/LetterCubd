@@ -2,3 +2,9 @@
 
 RatingsDictionary* RatingsDictionary::instance = nullptr;
 
+void RatingsDictionary::cacheAllRatings(std::map<std::string, int>) {
+
+
+
+    
+}

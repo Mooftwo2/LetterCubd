@@ -30,51 +30,8 @@ TODO FOR ALPHA RELEASE:
 
 EventListener<web::WebTask> web_listener;
 
-using WebFetchTask = Task<std::vector<RatingInfo>, int>;
-WebFetchTask fetchRatings(std::map<std::string, int> saved) {
-
-	return WebFetchTask::run([saved](auto progress, auto hasBeenCancelled) -> WebFetchTask::Result {
-		std::vector<RatingInfo> ratings;
-		
-		for(const auto& rating : saved) {
-			web_listener.bind([] (web::WebTask::Event* e) {	
-				if (web::WebResponse* value = e->getValue()) {
-					// The request finished!
-					auto str = value->string().unwrap();
-					log::info("{}", str);
-
-				} else if (web::WebProgress* progress = e->getProgress()) {
-					// The request is still in progress...
-					//log::info("{}", "progress");
-
-
-				} else if (e->isCancelled()) {
-					// Our request was cancelled
-					//log::info("{}", "fail");
-					
-				}
-			});
-
-			auto req = web::WebRequest().userAgent("").bodyString(fmt::format("type=0&secret=Wmfd2893gb7&str={}", rating.first));
-			std::string url = "http://www.boomlings.com/database/getGJLevels21.php";
-			
-			auto task = req.post(url);
-			web_listener.setFilter(task);
-		}
-		return ratings;
-	
-    }, "Fetching level data from Robtop servers");
-	
-}
-
-
-
-
 class $modify(LetterCubdMenuLayer, MenuLayer) {
-	struct Fields {
-		EventListener<WebFetchTask> m_fetchListener;
-	};
-
+	
 	bool init() {
 		if (!MenuLayer::init())
 			return false;
@@ -89,9 +46,12 @@ class $modify(LetterCubdMenuLayer, MenuLayer) {
 			log::info("{}", std::to_string(test.second));
 		}
 		*/
+		
 
 		mapInstance->setSavedRatings(saved);
 		Mod::get()->setSavedValue("ratings", saved);
+
+		mapInstance->cacheAllRatings(saved);
 
 		/*
 		// Check if we have a value; getValue() always returns a pointer
@@ -123,9 +83,8 @@ class $modify(LetterCubdMenuLayer, MenuLayer) {
 		*/
 
 		std::vector<RatingInfo> ratings;
-		
-		for(const auto& rating : saved) {
-			log::info("{}", "fetching");
+
+		log::info("{}", "fetching");
 			web_listener.bind([] (web::WebTask::Event* e) {	
 				if (web::WebResponse* value = e->getValue()) {
 					// The request finished!
@@ -143,7 +102,8 @@ class $modify(LetterCubdMenuLayer, MenuLayer) {
 					
 				}
 			});
-
+		
+		for(const auto& rating : saved) {
 			auto req = web::WebRequest().userAgent("").bodyString(fmt::format("type=0&secret=Wmfd2893gb7&str={}", rating.first));
 			std::string url = "http://www.boomlings.com/database/getGJLevels21.php";
 			
