@@ -1,4 +1,5 @@
 
+#include "Geode/Enums.hpp"
 #include "Geode/binding/TableViewCell.hpp"
 #include "Geode/cocos/cocoa/CCObject.h"
 #include "Geode/cocos/label_nodes/CCLabelBMFont.h"
@@ -146,10 +147,7 @@ RatingInfo m_info;
         //updating info from the map
         m_info.m_level_name = result.find("2")->second;
         
-        log::info("{}", result.find("17")->second);
-        
         chooseDifficultySprite(result.find("17")->second, result.find("9")->second, result.find("43")->second, result.find("25")->second);
-
 
         onGetLevelFinished();
         

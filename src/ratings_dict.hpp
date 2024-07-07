@@ -3,6 +3,7 @@
 #include "Geode/binding/GJUserScore.hpp"
 #include "Geode/modify/GJUserScore.hpp"
 #include "Geode/utils/web.hpp"
+#include <string>
 
 using namespace geode::prelude;
 
@@ -30,8 +31,13 @@ private:
 		cached = false;
 	}
 
+	int chooseDifficulty(std::string is_demon, std::string raw_diff, std::string demon_diff, std::string is_auto);
+
+	void parseLevel(std::string level, int rating);
+
 public:
-    // Method to get the instance
+    
+	std::vector<EventListener<web::WebTask> *> listeners;
 
 	bool isCached() {
 		return cached;
@@ -44,7 +50,7 @@ public:
         return instance;
     }
 
-    // Method to access the map
+
     std::vector<RatingInfo>& getCache() {
         return cached_ratings;
     }
@@ -52,9 +58,19 @@ public:
 		return saved_ratings;
 	}
 
-	void cacheAllRatings(std::map<std::string, int>);
+	void cacheAllRatings(std::map<std::string, int> ratings);
+
+	void fetchRating(std::pair<std::string, int> rating, EventListener<web::WebTask> *web_listener);
 
     void addCachedRating(RatingInfo info) {
+
+		log::info("{}", std::to_string(info.m_rating ));
+		log::info("{}", info.m_level_name);
+		log::info("{}", info.m_creator_name);
+		log::info("{}", std::to_string(info.m_levelID));
+		log::info("{}", std::to_string(info.m_difficulty));
+		log::info("{}", "=========");
+
         cached_ratings.push_back(info);
     }
 
