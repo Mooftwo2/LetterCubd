@@ -88,7 +88,7 @@ void RatingsDictionary::parseLevel(std::string level, int rating) {
 }
 
 int RatingsDictionary::chooseDifficulty(std::string is_demon, std::string raw_diff, std::string demon_diff, std::string is_auto) {
-    GJDifficulty test;
+    
     if(is_auto == "1") {
         return 0;
     }
