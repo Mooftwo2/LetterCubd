@@ -45,21 +45,23 @@ protected:
             this,
             menu_selector(RatingProfile::onLeft)
         );
+        leftBtn->setID("left-button");
+        menu->addChild(leftBtn);
+        leftBtn->setPositionY(this->getContentHeight() / 2);
+        leftBtn->setPositionX(this->getPositionX() + 25.f);
 
         auto rightBtn  = CCMenuItemSpriteExtra::create(
             CCSprite::createWithSpriteFrameName("GJ_arrow_01_001.png"),
             this,
             menu_selector(RatingProfile::onRight)
         );
+        rightBtn->setID("right-button");
         
-        
-        CCMenuItemSpriteExtra test;
-        
-
-        menu->addChild(leftBtn);
         
         menu->addChild(rightBtn);
-        rightBtn->setRotationX(180.f);
+        rightBtn->setPositionY(this->getContentHeight() / 2);
+        rightBtn->setPositionX(this->m_mainLayer->getContentWidth() - 25.f);
+        rightBtn->setRotationY(180.f);
         
 
         scroll = ScrollLayer::create(ccp(350, 180));
