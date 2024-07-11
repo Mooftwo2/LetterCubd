@@ -17,6 +17,15 @@ void RatingProfile::onExit(CCObject * sender) {
 
     
 }
+
+void RatingProfile::onLeft(CCObject * sender) {
+
+}
+
+void RatingProfile::onRight(CCObject * sender) {
+
+}
+
 void RatingProfile::getRatings() {
     auto data = RatingsDictionary::getInstance()->getCache();
 

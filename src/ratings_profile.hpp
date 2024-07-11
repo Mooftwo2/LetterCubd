@@ -1,26 +1,7 @@
 #pragma once
 
-#include "Geode/binding/CCMenuItemSpriteExtra.hpp"
-#include "Geode/binding/FriendsProfilePage.hpp"
-#include "Geode/binding/ProfilePage.hpp"
-#include "Geode/binding/ScrollingLayer.hpp"
-#include "Geode/binding_arm/CCMenuItemSpriteExtra.hpp"
-#include "Geode/cocos/CCDirector.h"
-#include "Geode/cocos/cocoa/CCArray.h"
-#include "Geode/cocos/cocoa/CCObject.h"
-#include "Geode/cocos/menu_nodes/CCMenu.h"
-#include "Geode/cocos/sprite_nodes/CCSprite.h"
-#include "Geode/loader/Event.hpp"
-#include "Geode/modify/FriendsProfilePage.hpp"
-#include "Geode/ui/BasedButtonSprite.hpp"
-#include "Geode/utils/cocos.hpp"
-#include "ratings_dict.hpp"
-#include "Geode/Enums.hpp"
-#include "Geode/binding/GJUserScore.hpp"
-#include "Geode/binding/ProfilePage.hpp"
-#include "Geode/cocos/cocoa/CCObject.h"
-#include "Geode/loader/Log.hpp"
-#include "Geode/modify/ProfilePage.hpp"
+#include <Geode/Geode.hpp>
+
 #include "ratings_dict.hpp"
 #include "player_profile.hpp"
 #include <string>
@@ -56,6 +37,29 @@ protected:
 
         back_button->setPosition({old_btn->getPositionX() + 10.f, old_btn->getPositionY() - 10.f});
         menu->addChild(back_button);
+        
+    
+        
+        auto leftBtn = CCMenuItemSpriteExtra::create(
+            CCSprite::createWithSpriteFrameName("GJ_arrow_01_001.png"),
+            this,
+            menu_selector(RatingProfile::onLeft)
+        );
+
+        auto rightBtn  = CCMenuItemSpriteExtra::create(
+            CCSprite::createWithSpriteFrameName("GJ_arrow_01_001.png"),
+            this,
+            menu_selector(RatingProfile::onRight)
+        );
+        
+        
+        CCMenuItemSpriteExtra test;
+        
+
+        menu->addChild(leftBtn);
+        
+        menu->addChild(rightBtn);
+        rightBtn->setRotationX(180.f);
         
 
         scroll = ScrollLayer::create(ccp(350, 180));

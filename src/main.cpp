@@ -45,6 +45,7 @@ class $modify(LetterCubdMenuLayer, MenuLayer) {
 		}
 		*/
 		
+		
 
 		mapInstance->setSavedRatings(saved);
 		Mod::get()->setSavedValue("ratings", saved);
