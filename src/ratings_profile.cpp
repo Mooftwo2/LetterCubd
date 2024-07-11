@@ -20,9 +20,11 @@ void RatingProfile::onExit(CCObject * sender) {
 void RatingProfile::getRatings() {
     auto data = RatingsDictionary::getInstance()->getCache();
 
+    //sort the data here
+
     int basePosY = this->getContentHeight();
     for(const auto & rating : data) {
-        auto cell = RatingCell::create(rating); //PASS A DIFFERENT DATA STRUCTURE W/ ALL INFO
+        auto cell = RatingCell::create(rating); 
         cell->setPositionY(basePosY);
         scroll->m_contentLayer->addChild(cell);
         scroll->m_contentLayer->setAnchorPoint(ccp(0,1));
@@ -41,7 +43,7 @@ void RatingProfile::getRatings() {
         
 }
 
-void RatingProfile::sortRatings(std::string filter) {
+void RatingProfile::sortRatings(std::vector<RatingInfo> *data, std::string filter) {
     CCArrayExt<RatingCell*> objects = scroll->m_contentLayer->getChildren();
 
     /*

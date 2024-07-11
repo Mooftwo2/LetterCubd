@@ -45,6 +45,9 @@ int m_levelID = 0;
 protected:
     bool setup(GJGameLevel * level) override {
         auto winSize = CCDirector::sharedDirector()->getWinSize();
+
+        auto test = level->m_stars.value();
+        log::info("{}", std::to_string(static_cast<int>(test)));
         
         // convenience function provided by Popup 
         // for adding/setting a title to the popup
@@ -200,13 +203,17 @@ protected:
         auto obj = static_cast<CCNode*>(sender)->getUserObject();
         auto lvl = static_cast<GJGameLevel*>(obj);
 
+        log::info("{}", std::to_string(static_cast<int>(lvl->m_difficulty)));
 
         RatingInfo info = RatingInfo();
         info.m_rating = star_rating_int;
         info.m_levelID = lvl->m_levelID.value();
         info.m_level_name = lvl->m_levelName;
         info.m_creator_name = lvl->m_creatorName;
-        info.m_difficulty = static_cast<int>(lvl->m_difficulty);
+        
+
+        info.m_difficulty = chooseDiff(lvl->m_stars.value(), lvl->m_demonDifficulty);
+        
 
         auto ratings_data = RatingsDictionary::getInstance();
         ratings_data->addCachedRating(info);
@@ -215,6 +222,53 @@ protected:
         Mod::get()->setSavedValue("ratings", ratings_data->getSaved());
         //log::info("{}", std::to_string(value));
         this->onClose(sender);
+    }
+
+    int chooseDiff(int stars, int demon) {
+    
+        if(stars == 0) {
+            //do it for unrated difficulties later
+
+            return -1;
+        }
+        else if(stars == 1) {
+            return 0;
+
+        }
+        else if(stars == 2) {
+            return 1;
+        }
+        else if (stars == 3) {
+            return 2;
+        }
+        else if (stars == 4 || stars == 5) {
+            return 3;
+        }
+        else if (stars == 6 || stars == 7) {
+            return 4;
+        }
+        else if (stars == 8 || stars == 9) {
+            return 5;
+        }
+        else if (stars == 10) {
+            if(demon == 0) {
+                return 6;
+            }
+            else if (demon == 3) {
+                return 7;
+            }
+            else if (demon == 4) {
+                return 8;
+            }
+            else if (demon == 5) {
+                return 9;
+            }
+            else if (demon == 6) {
+                return 10;
+            }
+        }
+        
+        return -1;
     }
 
 public:

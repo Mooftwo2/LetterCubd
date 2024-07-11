@@ -64,12 +64,7 @@ public:
 
     void addCachedRating(RatingInfo info) {
 
-		log::info("{}", std::to_string(info.m_rating ));
-		log::info("{}", info.m_level_name);
-		log::info("{}", info.m_creator_name);
-		log::info("{}", std::to_string(info.m_levelID));
-		log::info("{}", std::to_string(info.m_difficulty));
-		log::info("{}", "=========");
+		
 
         cached_ratings.push_back(info);
     }

@@ -4,6 +4,7 @@
 #include "Geode/binding/FriendsProfilePage.hpp"
 #include "Geode/binding/ProfilePage.hpp"
 #include "Geode/binding/ScrollingLayer.hpp"
+#include "Geode/binding_arm/CCMenuItemSpriteExtra.hpp"
 #include "Geode/cocos/CCDirector.h"
 #include "Geode/cocos/cocoa/CCArray.h"
 #include "Geode/cocos/cocoa/CCObject.h"
@@ -29,6 +30,7 @@ using namespace geode::prelude;
 class RatingProfile : public geode::Popup<> {
 
 ScrollLayer* scroll = nullptr;
+int pageNum;
 
 protected:
     bool setup() override {
@@ -41,10 +43,11 @@ protected:
         this->m_title->setColor(ccColor3B {255,255,255});
 
         auto layer = getChildOfType<CCLayer>(this, 0);
-
         auto old_btn = this->m_closeBtn;
         auto menu = this->m_buttonMenu;
         menu->removeChild(old_btn, true);
+        
+        
         auto back_button = CCMenuItemSpriteExtra::create(
             CCSprite::createWithSpriteFrameName("GJ_backBtn_001.png"),
             this,
@@ -53,11 +56,13 @@ protected:
 
         back_button->setPosition({old_btn->getPositionX() + 10.f, old_btn->getPositionY() - 10.f});
         menu->addChild(back_button);
+        
 
         scroll = ScrollLayer::create(ccp(350, 180));
 	    scroll->setAnchorPoint(ccp(0, 0));
 	    scroll->ignoreAnchorPointForPosition(false);
 
+    
         auto background = cocos2d::extension::CCScale9Sprite::create("square02_small.png");
         background->setContentSize(scroll->getContentSize());
         background->setOpacity(75);
@@ -71,9 +76,12 @@ protected:
 
     }
 
+    
+    void onLeft(CCObject * sender);
+    void onRight(CCObject * sender);
     void onExit(CCObject * sender);
     void getRatings();
-    void sortRatings(std::string filter);
+    void sortRatings(std::vector<RatingInfo> *data, std::string filter);
     
 
 public:
