@@ -46,9 +46,6 @@ protected:
     bool setup(GJGameLevel * level) override {
         auto winSize = CCDirector::sharedDirector()->getWinSize();
 
-        auto test = level->m_stars.value();
-        log::info("{}", std::to_string(static_cast<int>(test)));
-        
         // convenience function provided by Popup 
         // for adding/setting a title to the popup
 
@@ -203,17 +200,18 @@ protected:
         auto obj = static_cast<CCNode*>(sender)->getUserObject();
         auto lvl = static_cast<GJGameLevel*>(obj);
 
-        log::info("{}", std::to_string(static_cast<int>(lvl->m_difficulty)));
+        //log::info("{}", std::to_string(static_cast<int>(lvl->m_difficulty)));
 
         RatingInfo info = RatingInfo();
         info.m_rating = star_rating_int;
         info.m_levelID = lvl->m_levelID.value();
         info.m_level_name = lvl->m_levelName;
         info.m_creator_name = lvl->m_creatorName;
-        
-
+    
         info.m_difficulty = chooseDiff(lvl->m_stars.value(), lvl->m_demonDifficulty);
-        
+        info.m_feature = chooseFeature(lvl->m_featured, lvl->m_isEpic);
+
+        log::info("{}", std::to_string(info.m_feature));
 
         auto ratings_data = RatingsDictionary::getInstance();
         ratings_data->addCachedRating(info);
@@ -222,6 +220,20 @@ protected:
         Mod::get()->setSavedValue("ratings", ratings_data->getSaved());
         //log::info("{}", std::to_string(value));
         this->onClose(sender);
+    }
+
+    int chooseFeature(int featured, int epic) {
+        if(epic == 3) {
+            return 5;
+        }else if (epic == 2) {
+            return 4;
+        }else if (epic == 1) {
+            return 3;
+        }else if (epic == 0 && featured > 0) {
+            return 2;
+        }else {
+            return 1;
+        }
     }
 
     int chooseDiff(int stars, int demon) {

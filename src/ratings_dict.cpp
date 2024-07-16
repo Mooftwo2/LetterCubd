@@ -86,6 +86,9 @@ void RatingsDictionary::parseLevel(std::string level, int rating) {
     item.m_levelID = std::stoi(result.find("1")->second);
     item.m_difficulty = chooseDifficulty(result.find("17")->second, result.find("9")->second, result.find("43")->second, result.find("25")->second);
     
+    
+    item.m_feature = chooseFeature(result.find("19")->second, result.find("42")->second);
+
     addCachedRating(item);
 }
 
@@ -125,4 +128,21 @@ int RatingsDictionary::chooseDifficulty(std::string is_demon, std::string raw_di
     }
 
     return -2;
+}
+
+int RatingsDictionary::chooseFeature(std::string is_featured, std::string epic) {
+
+    log::info("{}", epic);
+
+    if(epic == "3") {
+        return 5;
+    }else if (epic == "2") {
+        return 4;
+    }else if (epic == "1") {
+        return 3;
+    }else if (epic == "0" && std::stoi(is_featured) > 0) {
+        return 2;
+    }else {
+        return 1;
+    }
 }

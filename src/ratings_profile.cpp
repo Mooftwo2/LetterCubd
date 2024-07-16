@@ -16,8 +16,6 @@ void RatingProfile::onExit(CCObject * sender) {
     alert->show();
 
     this->onClose(sender);
-
-    
 }
 
 void RatingProfile::onLeft(CCObject * sender) {
@@ -65,6 +63,8 @@ void RatingProfile::setupPageInitial() {
     
 
 
+    //GETTING THE RATING CELLS
+    
     int basePosY = this->getContentHeight();
     for(const auto & rating : data) {
         auto cell = RatingCell::create(rating); 

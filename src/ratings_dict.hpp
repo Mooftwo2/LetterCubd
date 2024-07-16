@@ -13,6 +13,7 @@ struct RatingInfo {
     int m_rating;
     int m_levelID;
     int m_difficulty;
+	int m_feature;
     std::string m_level_name;
     std::string m_creator_name;
 
@@ -32,6 +33,8 @@ private:
 	}
 
 	int chooseDifficulty(std::string is_demon, std::string raw_diff, std::string demon_diff, std::string is_auto);
+
+	int chooseFeature(std::string is_featured, std::string epic);
 
 	void parseLevel(std::string level, int rating);
 
@@ -64,7 +67,11 @@ public:
 
     void addCachedRating(RatingInfo info) {
 
-		
+		/*
+		TO-DO:
+		make sure rating a level from its page does not add duplicates
+		*/
+		//auto saved = getSaved();
 
         cached_ratings.push_back(info);
     }

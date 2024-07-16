@@ -19,6 +19,7 @@ class RatingCell : public CCLayerColor {
 
 CCSprite * diff_spr;
 CCSprite * star_sprite;
+CCSprite * feature_sprite;
 CCLabelBMFont * level_text;
 CCLabelBMFont * creator_text;
 RatingInfo m_info;
@@ -34,11 +35,22 @@ RatingInfo m_info;
         //generate the UI Content
         chooseStarSprite(info.m_rating);
         chooseDifficultySprite(info.m_difficulty);
+        chooseFeatureSprite(info.m_feature);
+        
+        //have to place this one first so it renders below
+         if(info.m_feature != 1) {
+            feature_sprite->setPositionY(this->getContentHeight()/2 - 5.5f);
+            feature_sprite->setPositionX(feature_sprite->getPositionX() + 25.f);
+            this->addChild(feature_sprite);
+            feature_sprite->setZOrder(1);
+        }
 
         diff_spr->setPositionY(this->getContentHeight()/2);
         diff_spr->setPositionX(diff_spr->getPositionX() + 25.f);
         this->addChild(diff_spr);
+        diff_spr->setZOrder(2);
 
+    
         //auto name_str = (m_level_name).c_str();
         //log::info("{}", m_level_name);
         level_text = CCLabelBMFont::create(info.m_level_name.c_str(), "goldFont.fnt");
@@ -63,6 +75,25 @@ RatingInfo m_info;
         
         
         return true;
+    }
+    void chooseFeatureSprite(int feature) {
+        switch (feature) {
+            case 2:
+                feature_sprite = CCSprite::createWithSpriteFrameName("GJ_featuredCoin_001.png");
+                break;
+            case 3:
+                feature_sprite = CCSprite::createWithSpriteFrameName("GJ_epicCoin_001.png");
+                break;
+            case 4:
+                feature_sprite = CCSprite::createWithSpriteFrameName("GJ_epicCoin2_001.png");
+                break;
+            case 5:
+                feature_sprite = CCSprite::createWithSpriteFrameName("GJ_epicCoin3_001.png");
+                break;
+            default:
+                log::info("{}", "why am i here");
+                break;
+        }
     }
     
     void chooseStarSprite(int rating) {
