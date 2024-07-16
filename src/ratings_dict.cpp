@@ -17,7 +17,9 @@ void RatingsDictionary::cacheAllRatings(std::map<std::string, int> ratings) {
         fetchRating(rating, listeners[counter]);
         ++counter;
     }    
+    
     cached = true;
+    log::info("{}", "user data cached");
 }
 void RatingsDictionary::fetchRating(std::pair<std::string, int> rating, EventListener<web::WebTask> *web_listener) {
 

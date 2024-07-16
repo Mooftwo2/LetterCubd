@@ -12,6 +12,7 @@ class RatingProfile : public geode::Popup<> {
 
 ScrollLayer* scroll = nullptr;
 int pageNum;
+//CCMenu* menu = nullptr;
 
 protected:
     bool setup() override {
@@ -20,6 +21,9 @@ protected:
         /*
         Change this to "{username's} ratings depending on if its another user's profile"
         */
+
+        pageNum = 0;
+
         this->setTitle("Your Ratings", "bigFont.fnt", 1.f);
         this->m_title->setColor(ccColor3B {255,255,255});
 
@@ -38,31 +42,7 @@ protected:
         back_button->setPosition({old_btn->getPositionX() + 10.f, old_btn->getPositionY() - 10.f});
         menu->addChild(back_button);
         
-    
-        
-        auto leftBtn = CCMenuItemSpriteExtra::create(
-            CCSprite::createWithSpriteFrameName("GJ_arrow_01_001.png"),
-            this,
-            menu_selector(RatingProfile::onLeft)
-        );
-        leftBtn->setID("left-button");
-        menu->addChild(leftBtn);
-        leftBtn->setPositionY(this->getContentHeight() / 2);
-        leftBtn->setPositionX(this->getPositionX() + 25.f);
 
-        auto rightBtn  = CCMenuItemSpriteExtra::create(
-            CCSprite::createWithSpriteFrameName("GJ_arrow_01_001.png"),
-            this,
-            menu_selector(RatingProfile::onRight)
-        );
-        rightBtn->setID("right-button");
-        
-        
-        menu->addChild(rightBtn);
-        rightBtn->setPositionY(this->getContentHeight() / 2);
-        rightBtn->setPositionX(this->m_mainLayer->getContentWidth() - 25.f);
-        rightBtn->setRotationY(180.f);
-        
 
         scroll = ScrollLayer::create(ccp(350, 180));
 	    scroll->setAnchorPoint(ccp(0, 0));
@@ -76,7 +56,8 @@ protected:
         this->addChild(background);
         background->addChild(scroll);
         
-        getRatings();
+
+        setupPageInitial();
         
         return true;
 
@@ -86,7 +67,8 @@ protected:
     void onLeft(CCObject * sender);
     void onRight(CCObject * sender);
     void onExit(CCObject * sender);
-    void getRatings();
+    void setupPageInitial();
+    void setupPage(int pageNum);
     void sortRatings(std::vector<RatingInfo> *data, std::string filter);
     
 

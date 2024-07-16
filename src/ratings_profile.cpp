@@ -2,6 +2,8 @@
 #include "Geode/cocos/cocoa/CCObject.h"
 #include "ratings_dict.hpp"
 #include "rating_cell.hpp"
+#include <cassert>
+#include <string>
 
 using namespace geode::prelude;
 
@@ -20,16 +22,48 @@ void RatingProfile::onExit(CCObject * sender) {
 
 void RatingProfile::onLeft(CCObject * sender) {
 
+    --pageNum;
+    assert(pageNum >= 0); 
+    setupPage(pageNum);
 }
 
 void RatingProfile::onRight(CCObject * sender) {
-
+    ++pageNum;
+    setupPage(pageNum);
+    
 }
 
-void RatingProfile::getRatings() {
+void RatingProfile::setupPageInitial() {
     auto data = RatingsDictionary::getInstance()->getCache();
+    auto menu = this->m_buttonMenu;
 
-    //sort the data here
+    auto leftBtn = CCMenuItemSpriteExtra::create(
+        CCSprite::createWithSpriteFrameName("GJ_arrow_01_001.png"),
+        this,
+        menu_selector(RatingProfile::onLeft)
+    );
+    leftBtn->setID("left-button");
+    menu->addChild(leftBtn);
+    leftBtn->setPositionY(this->getContentHeight() / 2);
+    leftBtn->setPositionX(this->getPositionX() + 25.f);
+    
+    leftBtn->setVisible(false);
+    leftBtn->setEnabled(false);
+
+    auto rightBtn  = CCMenuItemSpriteExtra::create(
+        CCSprite::createWithSpriteFrameName("GJ_arrow_01_001.png"),
+        this,
+        menu_selector(RatingProfile::onRight)
+    );
+    rightBtn->setID("right-button");
+    
+    
+    menu->addChild(rightBtn);
+    rightBtn->setPositionY(this->getContentHeight() / 2);
+    rightBtn->setPositionX(this->m_mainLayer->getContentWidth() - 25.f);
+    rightBtn->setRotationY(180.f);
+    
+
 
     int basePosY = this->getContentHeight();
     for(const auto & rating : data) {
@@ -50,6 +84,22 @@ void RatingProfile::getRatings() {
     }
     scroll->moveToTop();
         
+}
+
+void RatingProfile::setupPage(int pageNum) {
+
+
+    log::info("{}", std::to_string(pageNum));
+    auto leftBtn = static_cast<CCMenuItemSpriteExtra *>(this->m_buttonMenu->getChildByID("left-button"));
+
+    if(pageNum == 0) {
+        leftBtn->setVisible(false);
+        leftBtn->setEnabled(false);
+    }else {
+        leftBtn->setVisible(true);
+        leftBtn->setEnabled(true);
+    }
+    
 }
 
 void RatingProfile::sortRatings(std::vector<RatingInfo> *data, std::string filter) {
