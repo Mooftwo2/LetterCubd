@@ -7,6 +7,8 @@
 
 using namespace geode::prelude;
 
+ const int elementsPerPage = 10;
+
 void RatingProfile::onExit(CCObject * sender) {
 
     auto account = GJAccountManager::get();
@@ -32,7 +34,7 @@ void RatingProfile::onRight(CCObject * sender) {
 }
 
 void RatingProfile::setupPageInitial() {
-    auto data = RatingsDictionary::getInstance()->getCache();
+    
     auto menu = this->m_buttonMenu;
 
     auto leftBtn = CCMenuItemSpriteExtra::create(
@@ -61,13 +63,52 @@ void RatingProfile::setupPageInitial() {
     rightBtn->setPositionX(this->m_mainLayer->getContentWidth() - 25.f);
     rightBtn->setRotationY(180.f);
     
+    setupPage(0);
 
-
-    //GETTING THE RATING CELLS
     
+        
+}
+
+void RatingProfile::setupPage(int pageNum) {
+
+    auto data = RatingsDictionary::getInstance()->getCache();
+
+    log::info("{}", std::to_string(pageNum));
+
+    auto leftBtn = static_cast<CCMenuItemSpriteExtra *>(this->m_buttonMenu->getChildByID("left-button"));
+    auto rightBtn = static_cast<CCMenuItemSpriteExtra *>(this->m_buttonMenu->getChildByID("right-button"));
+
+    if(pageNum == 0) {
+        leftBtn->setVisible(false);
+        leftBtn->setEnabled(false);
+    }else {
+        leftBtn->setVisible(true);
+        leftBtn->setEnabled(true);
+    }
+    if(pageNum == data.size() / 10) {
+        rightBtn->setVisible(false);
+        rightBtn->setEnabled(false);
+    }else {
+        rightBtn->setVisible(true);
+        rightBtn->setEnabled(true);
+    }
+    
+    scroll->m_contentLayer->removeAllChildrenWithCleanup(true); //check for memory leak
+
+    size_t startIndex = pageNum * elementsPerPage;
+    size_t endIndex = startIndex + elementsPerPage;
+
+    assert(startIndex <= data.size());
+
+    endIndex = std::min(endIndex, data.size());
+
     int basePosY = this->getContentHeight();
-    for(const auto & rating : data) {
-        auto cell = RatingCell::create(rating); 
+
+    // Process the determined number of elements
+    for (size_t i = startIndex; i < endIndex; ++i) {
+    int basePosY = this->getContentHeight();
+
+        auto cell = RatingCell::create(data[i]); 
         cell->setPositionY(basePosY);
         scroll->m_contentLayer->addChild(cell);
         scroll->m_contentLayer->setAnchorPoint(ccp(0,1));
@@ -83,22 +124,13 @@ void RatingProfile::setupPageInitial() {
         obj->setPositionY(height - (65 * i));
     }
     scroll->moveToTop();
-        
-}
-
-void RatingProfile::setupPage(int pageNum) {
 
 
-    log::info("{}", std::to_string(pageNum));
-    auto leftBtn = static_cast<CCMenuItemSpriteExtra *>(this->m_buttonMenu->getChildByID("left-button"));
 
-    if(pageNum == 0) {
-        leftBtn->setVisible(false);
-        leftBtn->setEnabled(false);
-    }else {
-        leftBtn->setVisible(true);
-        leftBtn->setEnabled(true);
-    }
+
+
+
+
     
 }
 
