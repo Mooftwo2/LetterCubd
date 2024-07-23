@@ -2,6 +2,11 @@
 
 #include <Geode/Geode.hpp>
 
+#include "Geode/binding/CCMenuItemSpriteExtra.hpp"
+#include "Geode/binding/ButtonSprite.hpp"
+#include "Geode/binding/CCMenuItemSpriteExtra.hpp"
+#include "Geode/cocos/cocoa/CCObject.h"
+#include "Geode/ui/BasedButtonSprite.hpp"
 #include "ratings_dict.hpp"
 #include "player_profile.hpp"
 #include <string>
@@ -57,6 +62,18 @@ protected:
         background->addChild(scroll);
         
 
+        auto sort_sprite = AccountButtonSprite::createWithSpriteFrameName("GJ_filterIcon_001.png");
+        auto sort_button = CCMenuItemSpriteExtra::create(
+            sort_sprite,
+            this,
+            menu_selector(RatingProfile::onSort)
+        );
+        menu->addChild(sort_button);
+
+        sort_button->setPositionX(menu->getContentWidth() / 2);
+        sort_button->setPositionY(15.f);
+
+
         setupPageInitial();
         
         return true;
@@ -64,6 +81,7 @@ protected:
     }
 
     
+    void onSort(CCObject * sender);
     void onLeft(CCObject * sender);
     void onRight(CCObject * sender);
     void onExit(CCObject * sender);
@@ -83,6 +101,89 @@ public:
         return nullptr;
     }
 };
+
+
+
+
+
+
+class SortPopup : public geode::Popup<> {
+protected:
+    bool setup() override {
+
+        this->setTitle("Sort Ratings by:", "bigFont.fnt", 1.f);
+
+        auto name = ButtonSprite::create("NAME");
+        auto score = ButtonSprite::create("SCORE");
+        auto difficulty = ButtonSprite::create("DIFFICULTY");
+        auto lvlID = ButtonSprite::create("LEVEL ID");
+        auto creator = ButtonSprite::create("CREATOR");
+        auto feature = ButtonSprite::create("FEATURE");
+
+        auto name_btn = CCMenuItemSpriteExtra::create(
+            name,
+            this,
+            menu_selector(SortPopup::onSortSelect)
+        );
+        this->m_buttonMenu->addChild(name_btn);
+        
+        auto score_btn = CCMenuItemSpriteExtra::create(
+            score,
+            this,
+            menu_selector(SortPopup::onSortSelect)
+        );
+        this->m_buttonMenu->addChild(score_btn);
+
+        auto diff_btn = CCMenuItemSpriteExtra::create(
+            difficulty,
+            this,
+            menu_selector(SortPopup::onSortSelect)
+        );
+        this->m_buttonMenu->addChild(diff_btn);
+
+        auto ID_btn = CCMenuItemSpriteExtra::create(
+            lvlID,
+            this,
+            menu_selector(SortPopup::onSortSelect)
+        );
+        this->m_buttonMenu->addChild(ID_btn);
+
+        auto creator_btn = CCMenuItemSpriteExtra::create(
+            creator,
+            this,
+            menu_selector(SortPopup::onSortSelect)
+        );
+        this->m_buttonMenu->addChild(creator_btn);
+
+        auto feature_btn = CCMenuItemSpriteExtra::create(
+            feature,
+            this,
+            menu_selector(SortPopup::onSortSelect)
+        );
+        this->m_buttonMenu->addChild(feature_btn);
+        
+        return true;
+    }
+
+    void onSortSelect(CCObject * sender) {
+
+    }
+
+
+public:
+    static SortPopup* create() {
+        auto ret = new SortPopup();
+        if (ret && ret->initAnchored(290.f, 180.f)) {
+            ret->autorelease();
+            return ret;
+        }
+        CC_SAFE_DELETE(ret);
+        return nullptr;
+    }
+};
+
+
+
 
 
 

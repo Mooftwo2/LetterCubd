@@ -9,6 +9,12 @@ using namespace geode::prelude;
 
  const int elementsPerPage = 10;
 
+void RatingProfile::onSort(CCObject * sender) {
+
+    
+    SortPopup::create()->show();
+}
+
 void RatingProfile::onExit(CCObject * sender) {
 
     auto account = GJAccountManager::get();
@@ -126,12 +132,6 @@ void RatingProfile::setupPage(int pageNum) {
     scroll->moveToTop();
 
 
-
-
-
-
-
-    
 }
 
 void RatingProfile::sortRatings(std::vector<RatingInfo> *data, std::string filter) {
