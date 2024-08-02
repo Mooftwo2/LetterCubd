@@ -5,6 +5,7 @@
 #include "Geode/binding/CCMenuItemSpriteExtra.hpp"
 #include "Geode/binding/ButtonSprite.hpp"
 #include "Geode/binding/CCMenuItemSpriteExtra.hpp"
+#include "Geode/cocos/cocoa/CCGeometry.h"
 #include "Geode/cocos/cocoa/CCObject.h"
 #include "Geode/ui/BasedButtonSprite.hpp"
 #include "ratings_dict.hpp"
@@ -103,29 +104,35 @@ public:
 };
 
 
-
-
-
-
 class SortPopup : public geode::Popup<> {
 protected:
     bool setup() override {
 
         this->setTitle("Sort Ratings by:", "bigFont.fnt", 1.f);
+        this->m_title->setPositionY(this->m_title->getPositionY() - 5.f);
 
-        auto name = ButtonSprite::create("NAME");
-        auto score = ButtonSprite::create("SCORE");
-        auto difficulty = ButtonSprite::create("DIFFICULTY");
-        auto lvlID = ButtonSprite::create("LEVEL ID");
-        auto creator = ButtonSprite::create("CREATOR");
-        auto feature = ButtonSprite::create("FEATURE");
+        auto name = ButtonSprite::create("NAME", 100, 1, 1.f, true);
+
+        auto score = ButtonSprite::create("SCORE", 100, 1, 1.f, true);
+        
+        auto difficulty = ButtonSprite::create("DIFFICULTY", 100, 1, 1.f, true);
+       
+        auto lvlID = ButtonSprite::create("LEVEL ID", 100, 1, 1.f, true);
+       
+        auto creator = ButtonSprite::create("CREATOR", 100, 1, 1.f, true);
+        
+        auto feature = ButtonSprite::create("FEATURE", 100, 1, 1.f, true);
+       
 
         auto name_btn = CCMenuItemSpriteExtra::create(
             name,
             this,
             menu_selector(SortPopup::onSortSelect)
         );
+       
         this->m_buttonMenu->addChild(name_btn);
+        name_btn->setPositionX((this->m_mainLayer->getContentWidth() / 2) - 75.f);
+        name_btn->setPositionY(110.f);
         
         auto score_btn = CCMenuItemSpriteExtra::create(
             score,
@@ -133,6 +140,8 @@ protected:
             menu_selector(SortPopup::onSortSelect)
         );
         this->m_buttonMenu->addChild(score_btn);
+        score_btn->setPositionX((this->m_mainLayer->getContentWidth() / 2) + 75.f);
+        score_btn->setPositionY(110.f);
 
         auto diff_btn = CCMenuItemSpriteExtra::create(
             difficulty,
@@ -140,6 +149,8 @@ protected:
             menu_selector(SortPopup::onSortSelect)
         );
         this->m_buttonMenu->addChild(diff_btn);
+        diff_btn->setPositionX((this->m_mainLayer->getContentWidth() / 2) - 75.f);
+        diff_btn->setPositionY(70.f);
 
         auto ID_btn = CCMenuItemSpriteExtra::create(
             lvlID,
@@ -147,6 +158,8 @@ protected:
             menu_selector(SortPopup::onSortSelect)
         );
         this->m_buttonMenu->addChild(ID_btn);
+        ID_btn->setPositionX((this->m_mainLayer->getContentWidth() / 2) + 75.f);
+        ID_btn->setPositionY(70.f);
 
         auto creator_btn = CCMenuItemSpriteExtra::create(
             creator,
@@ -154,6 +167,8 @@ protected:
             menu_selector(SortPopup::onSortSelect)
         );
         this->m_buttonMenu->addChild(creator_btn);
+        creator_btn->setPositionX((this->m_mainLayer->getContentWidth() / 2) - 75.f);
+        creator_btn->setPositionY(30.f);
 
         auto feature_btn = CCMenuItemSpriteExtra::create(
             feature,
@@ -161,6 +176,8 @@ protected:
             menu_selector(SortPopup::onSortSelect)
         );
         this->m_buttonMenu->addChild(feature_btn);
+        feature_btn->setPositionX((this->m_mainLayer->getContentWidth() / 2) + 75.f);
+        feature_btn->setPositionY(30.f);
         
         return true;
     }
@@ -173,7 +190,7 @@ protected:
 public:
     static SortPopup* create() {
         auto ret = new SortPopup();
-        if (ret && ret->initAnchored(290.f, 180.f)) {
+        if (ret && ret->initAnchored(300.f, 180.f)) {
             ret->autorelease();
             return ret;
         }
