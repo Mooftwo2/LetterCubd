@@ -7,6 +7,7 @@
 #include "Geode/binding/CCMenuItemSpriteExtra.hpp"
 #include "Geode/cocos/cocoa/CCGeometry.h"
 #include "Geode/cocos/cocoa/CCObject.h"
+#include "Geode/cocos/touch_dispatcher/CCTouchDispatcher.h"
 #include "Geode/ui/BasedButtonSprite.hpp"
 #include "ratings_dict.hpp"
 #include "player_profile.hpp"
@@ -107,7 +108,6 @@ public:
 class SortPopup : public geode::Popup<> {
 protected:
     bool setup() override {
-
         this->setTitle("Sort Ratings by:", "bigFont.fnt", 1.f);
         this->m_title->setPositionY(this->m_title->getPositionY() - 5.f);
 
@@ -184,6 +184,11 @@ protected:
 
     void onSortSelect(CCObject * sender) {
 
+    }
+
+    void registerWithTouchDispatcher() override {
+        CCTouchDispatcher::get()->addTargetedDelegate(this, -507, true);
+        handleTouchPriority(this);
     }
 
 

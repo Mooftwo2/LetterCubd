@@ -1,5 +1,6 @@
 #include "ratings_profile.hpp"
 #include "Geode/cocos/cocoa/CCObject.h"
+#include "Geode/cocos/touch_dispatcher/CCTouchDispatcher.h"
 #include "ratings_dict.hpp"
 #include "rating_cell.hpp"
 #include <cassert>
@@ -10,7 +11,6 @@ using namespace geode::prelude;
  const int elementsPerPage = 10;
 
 void RatingProfile::onSort(CCObject * sender) {
-
     
     SortPopup::create()->show();
 }
