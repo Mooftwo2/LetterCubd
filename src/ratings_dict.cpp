@@ -132,7 +132,7 @@ int RatingsDictionary::chooseDifficulty(std::string is_demon, std::string raw_di
 
 int RatingsDictionary::chooseFeature(std::string is_featured, std::string epic) {
 
-    log::info("{}", epic);
+    //log::info("{}", epic);
 
     if(epic == "3") {
         return 5;

@@ -102,6 +102,7 @@ public:
         CC_SAFE_DELETE(ret);
         return nullptr;
     }
+    
 };
 
 
@@ -133,6 +134,7 @@ protected:
         this->m_buttonMenu->addChild(name_btn);
         name_btn->setPositionX((this->m_mainLayer->getContentWidth() / 2) - 75.f);
         name_btn->setPositionY(110.f);
+        name_btn->setTag(4);
         
         auto score_btn = CCMenuItemSpriteExtra::create(
             score,
@@ -142,6 +144,7 @@ protected:
         this->m_buttonMenu->addChild(score_btn);
         score_btn->setPositionX((this->m_mainLayer->getContentWidth() / 2) + 75.f);
         score_btn->setPositionY(110.f);
+        score_btn->setTag(0);
 
         auto diff_btn = CCMenuItemSpriteExtra::create(
             difficulty,
@@ -151,6 +154,7 @@ protected:
         this->m_buttonMenu->addChild(diff_btn);
         diff_btn->setPositionX((this->m_mainLayer->getContentWidth() / 2) - 75.f);
         diff_btn->setPositionY(70.f);
+        diff_btn->setTag(2);
 
         auto ID_btn = CCMenuItemSpriteExtra::create(
             lvlID,
@@ -160,6 +164,7 @@ protected:
         this->m_buttonMenu->addChild(ID_btn);
         ID_btn->setPositionX((this->m_mainLayer->getContentWidth() / 2) + 75.f);
         ID_btn->setPositionY(70.f);
+        ID_btn->setTag(1);
 
         auto creator_btn = CCMenuItemSpriteExtra::create(
             creator,
@@ -169,6 +174,7 @@ protected:
         this->m_buttonMenu->addChild(creator_btn);
         creator_btn->setPositionX((this->m_mainLayer->getContentWidth() / 2) - 75.f);
         creator_btn->setPositionY(30.f);
+        creator_btn->setTag(5);
 
         auto feature_btn = CCMenuItemSpriteExtra::create(
             feature,
@@ -178,13 +184,13 @@ protected:
         this->m_buttonMenu->addChild(feature_btn);
         feature_btn->setPositionX((this->m_mainLayer->getContentWidth() / 2) + 75.f);
         feature_btn->setPositionY(30.f);
-        
+        feature_btn->setTag(3);
         return true;
     }
 
-    void onSortSelect(CCObject * sender) {
+    void onSortSelect(CCObject * sender);
 
-    }
+    
 
     void registerWithTouchDispatcher() override {
         CCTouchDispatcher::get()->addTargetedDelegate(this, -507, true);

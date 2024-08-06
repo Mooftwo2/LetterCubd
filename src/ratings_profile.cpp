@@ -1,6 +1,7 @@
 #include "ratings_profile.hpp"
 #include "Geode/cocos/cocoa/CCObject.h"
 #include "Geode/cocos/touch_dispatcher/CCTouchDispatcher.h"
+#include "Geode/loader/Log.hpp"
 #include "ratings_dict.hpp"
 #include "rating_cell.hpp"
 #include <cassert>
@@ -142,4 +143,57 @@ void RatingProfile::sortRatings(std::vector<RatingInfo> *data, std::string filte
 
     -dynamically allocate std::vector for objects to sort easier
     */
+}
+
+void SortPopup::onSortSelect(CCObject * sender) {
+
+    auto filter = sender->getTag();
+
+    log::info("{}", std::to_string(filter));
+
+    auto data = RatingsDictionary::getInstance()->getCache();
+
+    switch(filter) {
+
+        case 0: //score
+            std::sort(data.begin(), data.end(), [](const RatingInfo& a, const RatingInfo& b) {
+            return a.m_rating < b.m_rating;
+            });
+            break;
+        case 1: //level ID
+            std::sort(data.begin(), data.end(), [](const RatingInfo& a, const RatingInfo& b) {
+            return a.m_levelID < b.m_levelID;
+            });
+            break;
+        case 2: //difficulty
+            std::sort(data.begin(), data.end(), [](const RatingInfo& a, const RatingInfo& b) {
+            return a.m_difficulty < b.m_difficulty;
+            });
+            break;
+        case 3: //feature
+            std::sort(data.begin(), data.end(), [](const RatingInfo& a, const RatingInfo& b) {
+            return a.m_feature < b.m_feature;
+            });
+            break;
+        case 4: //level name
+            std::sort(data.begin(), data.end(), [](const RatingInfo& a, const RatingInfo& b) {
+            return a.m_level_name < b.m_level_name;
+            });
+            break;
+        case 5: //creator name
+            std::sort(data.begin(), data.end(), [](const RatingInfo& a, const RatingInfo& b) {
+            return a.m_creator_name < b.m_creator_name;
+            });
+            break;
+        default:
+            break;
+
+    }
+
+    RatingsDictionary::getInstance()->setCachedRatings(data);
+
+    //find some way to call setupPageInitial()
+    
+
+    this->onClose(sender);
 }
