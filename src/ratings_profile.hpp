@@ -87,8 +87,7 @@ protected:
     void onLeft(CCObject * sender);
     void onRight(CCObject * sender);
     void onExit(CCObject * sender);
-    
-    void setupPage(int pageNum);
+    void setupPageInitial();
     void sortRatings(std::vector<RatingInfo> *data, std::string filter);
     
 
@@ -103,7 +102,9 @@ public:
         return nullptr;
     }
     
-    void setupPageInitial();
+    void setupPage(int pageNum);
+    int getPageNum() {return pageNum;}
+    void setPageNum(int num) {pageNum = num;}
     
 };
 

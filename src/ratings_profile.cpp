@@ -193,7 +193,8 @@ void SortPopup::onSortSelect(CCObject * sender) {
 
     RatingsDictionary::getInstance()->setCachedRatings(data);
     //underlying_profile->removeAllChildrenWithCleanup(true);
-    underlying_profile->setupPageInitial();
+    underlying_profile->setPageNum(0);
+    underlying_profile->setupPage(0);
 
     //find some way to call setupPageInitial()
     
