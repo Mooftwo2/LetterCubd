@@ -13,7 +13,7 @@ using namespace geode::prelude;
 
 void RatingProfile::onSort(CCObject * sender) {
     
-    SortPopup::create()->show();
+    SortPopup::create(this)->show();
 }
 
 void RatingProfile::onExit(CCObject * sender) {
@@ -188,9 +188,12 @@ void SortPopup::onSortSelect(CCObject * sender) {
         default:
             break;
 
+
     }
 
     RatingsDictionary::getInstance()->setCachedRatings(data);
+    //underlying_profile->removeAllChildrenWithCleanup(true);
+    underlying_profile->setupPageInitial();
 
     //find some way to call setupPageInitial()
     

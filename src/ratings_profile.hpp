@@ -87,7 +87,7 @@ protected:
     void onLeft(CCObject * sender);
     void onRight(CCObject * sender);
     void onExit(CCObject * sender);
-    void setupPageInitial();
+    
     void setupPage(int pageNum);
     void sortRatings(std::vector<RatingInfo> *data, std::string filter);
     
@@ -103,12 +103,19 @@ public:
         return nullptr;
     }
     
+    void setupPageInitial();
+    
 };
 
 
-class SortPopup : public geode::Popup<> {
+class SortPopup : public geode::Popup<RatingProfile*> {
 protected:
-    bool setup() override {
+
+    RatingProfile* underlying_profile;
+
+    bool setup(RatingProfile* profile) override {
+        underlying_profile = profile;
+
         this->setTitle("Sort Ratings by:", "bigFont.fnt", 1.f);
         this->m_title->setPositionY(this->m_title->getPositionY() - 5.f);
 
@@ -199,15 +206,17 @@ protected:
 
 
 public:
-    static SortPopup* create() {
+    static SortPopup* create(RatingProfile* profile) {
         auto ret = new SortPopup();
-        if (ret && ret->initAnchored(300.f, 180.f)) {
+        if (ret && ret->initAnchored(300.f, 180.f, profile)) {
             ret->autorelease();
             return ret;
         }
         CC_SAFE_DELETE(ret);
         return nullptr;
     }
+
+
 };
 
 
