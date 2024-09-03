@@ -76,6 +76,19 @@ protected:
         sort_button->setPositionY(15.f);
 
 
+        auto reverse_sprite = EditorButtonSprite::createWithSpriteFrameName("edit_flipYBtn_001.png");
+        reverse_sprite->setScale(0.8f);
+        auto reverse_button = CCMenuItemSpriteExtra::create(
+            reverse_sprite,
+            this,
+            menu_selector(RatingProfile::onReverse)
+        );
+        menu->addChild(reverse_button);
+
+        reverse_button->setPositionX(menu->getContentWidth() - 25.f);
+        reverse_button->setPositionY(menu->getContentHeight() - 70.f);
+
+
         setupPageInitial();
         
         return true;
@@ -84,6 +97,7 @@ protected:
 
     
     void onSort(CCObject * sender);
+    void onReverse(CCObject * sender);
     void onLeft(CCObject * sender);
     void onRight(CCObject * sender);
     void onExit(CCObject * sender);

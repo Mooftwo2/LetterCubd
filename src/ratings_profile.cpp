@@ -40,6 +40,17 @@ void RatingProfile::onRight(CCObject * sender) {
     
 }
 
+void RatingProfile::onReverse(CCObject * sender) {
+    auto instance = RatingsDictionary::getInstance();
+    auto data = instance->getCache();
+    std::reverse(data.begin(), data.end());
+    instance->setCachedRatings(data);
+
+    setPageNum(0);
+    setupPage(0);
+
+}
+
 void RatingProfile::setupPageInitial() {
     
     auto menu = this->m_buttonMenu;
@@ -51,7 +62,7 @@ void RatingProfile::setupPageInitial() {
     );
     leftBtn->setID("left-button");
     menu->addChild(leftBtn);
-    leftBtn->setPositionY(this->getContentHeight() / 2);
+    leftBtn->setPositionY((this->getContentHeight() / 2) - 10.f);
     leftBtn->setPositionX(this->getPositionX() + 25.f);
     
     leftBtn->setVisible(false);
@@ -66,7 +77,7 @@ void RatingProfile::setupPageInitial() {
     
     
     menu->addChild(rightBtn);
-    rightBtn->setPositionY(this->getContentHeight() / 2);
+    rightBtn->setPositionY(this->getContentHeight() / 2 - 10.f);
     rightBtn->setPositionX(this->m_mainLayer->getContentWidth() - 25.f);
     rightBtn->setRotationY(180.f);
     
